@@ -1,0 +1,39 @@
+<!DOCTYPE rkplugin >
+<document>
+	<!--
+		this code was generated using the rkwarddev package.
+	perhaps don't make changes here, but in the rkwarddev script instead!
+	-->
+	<code file="DictionaryLookup.js" />
+	<help file="DictionaryLookup.rkh" />
+	<!--
+		<dependencies>
+		</dependencies>
+	-->
+	<logic>
+		<!--
+			<convert id="!edit!" sources="!edit!" mode="equals" standard="!edit!" />
+		-->
+		<!--
+			<connect governor="!edit!.state" client="!edit!.enabled" />
+		-->
+	</logic>
+	<dialog label="Dictionary Label Lookup">
+		<row id="row_vDDTDFDDDD">
+			<varselector id="vars" />
+			<column id="clm_fDDTDFDDDD">
+				<frame label="Data" id="frm_Data">
+					<varslot id="dl_target" label="Target Data Frame" source="vars" classes="data.frame" required="true" />
+				</frame>
+				<frame label="Dictionary" id="frm_Dictinry">
+					<varslot id="dl_dict" label="Dictionary Data Frame" source="vars" classes="data.frame" required="true" />
+				</frame>
+				<frame label="Columns" id="frm_Columns">
+					<input label="Dictionary Key Column" id="dl_key_col" required="true" />
+					<input label="Dictionary Value Column" id="dl_val_col" required="true" />
+				</frame>
+				<saveobject label="Save Target as" checkable="true" checked="true" initial="labeled_data" id="dl_save" />
+			</column>
+		</row>
+	</dialog>
+</document>

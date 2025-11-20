@@ -1,0 +1,62 @@
+<!DOCTYPE rkplugin >
+<document>
+	<!--
+		this code was generated using the rkwarddev package.
+	perhaps don't make changes here, but in the rkwarddev script instead!
+	-->
+	<code file="SequenceRename.js" />
+	<help file="SequenceRename.rkh" />
+	<!--
+		<dependencies>
+		</dependencies>
+	-->
+	<logic>
+		<!--
+			<convert id="!edit!" sources="!edit!" mode="equals" standard="!edit!" />
+		-->
+		<!--
+			<connect governor="!edit!.state" client="!edit!.enabled" />
+		-->
+	</logic>
+	<dialog label="Sequence Rename">
+		<row id="row_vSSSDFSCRS">
+			<varselector id="vars" />
+			<column id="clm_tSSSDFSCRS">
+				<tabbook>
+					<tab label="Selection" id="tab_Selectin">
+						<column id="clm_vrslSDFSCR">
+							<varslot id="sr_df" label="Select Data Frame" source="vars" classes="data.frame" required="true" />
+							<varslot id="sr_cols" label="Select Columns to Rename" source="vars" required="true" multi="true" />
+						</column>
+					</tab>
+					<tab label="Configuration" id="tab_Confgrtn">
+						<column id="clm_rMSTRSOSOP">
+							<radio id="sr_mode" label="Mode">
+								<option label="Sequence" value="seq" checked="true" />
+								<option label="Tibble Repair" value="tibble" />
+							</radio>
+							<frame label="Sequence Options" id="frm_SqncOptn">
+								<frame id="frm_inpPVSSN11">
+									<input label="Prefix" id="sr_prefix" initial="Var" />
+									<input label="Suffix" id="sr_suffix" />
+									<spinbox label="Start Number" id="sr_start" initial="1" min="1" />
+								</frame>
+							</frame>
+							<frame label="Tibble Repair" id="frm_TibblRpr">
+								<dropdown id="sr_repair" label="Repair Strategy">
+									<option label="Universal" value="universal" checked="true" />
+									<option label="Unique" value="unique" />
+								</dropdown>
+							</frame>
+						</column>
+					</tab>
+					<tab label="Output" id="tab_Output">
+						<column id="clm_svbjctlbSR">
+							<saveobject label="Save Result" checkable="true" initial="renamed_df" id="sr_save" />
+						</column>
+					</tab>
+				</tabbook>
+			</column>
+		</row>
+	</dialog>
+</document>

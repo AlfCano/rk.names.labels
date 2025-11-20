@@ -1,0 +1,82 @@
+<!DOCTYPE rkplugin >
+<document>
+	<!--
+		this code was generated using the rkwarddev package.
+	perhaps don't make changes here, but in the rkwarddev script instead!
+	-->
+	<code file="TidyNamesandLabels.js" />
+	<help file="TidyNamesandLabels.rkh" />
+	<!--
+		<dependencies>
+		</dependencies>
+	-->
+	<logic>
+		<!--
+			<convert id="!edit!" sources="!edit!" mode="equals" standard="!edit!" />
+		-->
+		<!--
+			<connect governor="!edit!.state" client="!edit!.enabled" />
+		-->
+	</logic>
+	<dialog label="Tidy Names and Labels">
+		<row id="row_vIISDFLSDF">
+			<varselector id="vars" />
+			<column id="clm_tIISDFLSDF">
+				<tabbook>
+					<tab label="Input" id="tab_Input">
+						<column id="clm_vrsltdSDFL">
+							<varslot id="tn_obj" label="Select Data Frame or List" source="vars" classes="data.frame list" required="true" />
+						</column>
+					</tab>
+					<tab label="Transformations" id="tab_Trnsfrmt">
+						<column id="clm_fSRSRNRSNO">
+							<frame label="Structure &amp; Repair" id="frm_StrctrRp">
+								<dropdown id="tn_repair_method" label="Name Repair Strategy (Names Only)">
+									<option label="None" value="none" checked="true" />
+									<option label="Janitor (snake_case)" value="janitor" />
+									<option label="Make Syntactic (base::make.names)" value="syntactic" />
+									<option label="Make Unique (base::make.unique)" value="unique" />
+									<option label="Universal (vctrs/tibble)" value="universal" />
+								</dropdown>
+							</frame>
+							<frame label="Case Conversion" id="frm_CsCnvrsn">
+								<radio id="tn_case_method" label="Case Transformation">
+									<option label="No Change" value="none" checked="true" />
+									<option label="Lowercase (tolower)" value="lower" />
+									<option label="Uppercase (toupper)" value="upper" />
+								</radio>
+							</frame>
+							<frame label="Scope and Cleanup" id="frm_ScpndCln">
+								<dropdown id="tn_scope" label="Apply Transformations To">
+									<option label="Names Only" value="names" checked="true" />
+									<option label="Labels Only" value="labels" />
+									<option label="Both Names and Labels" value="both" />
+								</dropdown>
+								<row id="row_cTW1SW1TW1">
+									<column id="clm_chckTW1SW1">
+										<checkbox id="tn_trim" label="Trim Whitespace (str_trim)" value="1" />
+										<checkbox id="tn_squish" label="Squish Whitespace (str_squish)" value="1" />
+									</column>
+								</row>
+							</frame>
+							<text id="txt_bNtNRNCW">
+								<b>
+									Note:
+								</b>
+								'Name Repair' strategies only affect Names. Case and Whitespace options apply based on the dropdown selection.
+							</text>
+						</column>
+					</tab>
+					<tab label="Output" id="tab_Output">
+						<column id="clm_frAAAACA1S">
+							<frame label="Additional Actions" id="frm_AddtnlAc">
+								<checkbox id="tn_copy_to_label" label="Copy variable names to labels (After processing)" value="1" />
+							</frame>
+							<saveobject label="Save result as" checkable="true" checked="true" initial="tidy_data" id="tn_save_res" />
+						</column>
+					</tab>
+				</tabbook>
+			</column>
+		</row>
+	</dialog>
+</document>

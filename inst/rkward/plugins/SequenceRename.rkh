@@ -1,0 +1,54 @@
+<!DOCTYPE rkhelp >
+<document>
+	<!--
+		this code was generated using the rkwarddev package.
+	perhaps don't make changes here, but in the rkwarddev script instead!
+	-->
+	<title>
+		Sequence Rename
+	</title>
+	<summary>
+	</summary>
+	<usage>
+	</usage>
+	<!--
+		<section id="sct_EDITORDE" title="EDIT OR DELETE ME">
+			EDIT OR DELETE ME
+		</section>
+	-->
+	<settings>
+		<caption id="tab_Selectin" />
+		<setting id="sr_df">
+		</setting>
+		<setting id="sr_cols">
+		</setting>
+		<caption id="tab_Confgrtn" />
+		<setting id="sr_mode">
+		</setting>
+		<caption id="frm_SqncOptn" />
+		<caption id="frm_inpPVSSN11" />
+		<setting id="sr_prefix">
+		</setting>
+		<setting id="sr_suffix">
+		</setting>
+		<setting id="sr_start">
+		</setting>
+		<caption id="frm_TibblRpr" />
+		<setting id="sr_repair">
+		</setting>
+		<caption id="tab_Output" />
+		<setting id="sr_save">
+		</setting>
+	</settings>
+	<!--
+		<related>
+			<ul>
+				<li>
+					<link href="rkward://rhelp/..." />
+				</li>
+			</ul>
+		</related>
+	-->
+	<technical>
+	</technical>
+</document>

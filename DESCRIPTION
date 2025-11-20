@@ -1,0 +1,19 @@
+Package: rk.names.labels
+Type: Package
+Title: A plugin package to clean and create names and labels of
+        variables of a data.frame or manipulate names in a list in the
+        Rkward GUI.
+Version: 0.0.1
+Date: 2025-11-19
+Author: Alfonso Cano
+Maintainer: Alfonso Cano <alfonso.cano@correo.buap.mx>
+Enhances: rkward
+Description: A plugin package to clean and create names and labels of
+        variables of a data.frame or manipulate names in a list in the
+        Rkward GUI.
+License: GPL (>= 3)
+Encoding: UTF-8
+LazyLoad: yes
+URL: https://github.com/AlfCano/rk.names.labels
+Authors@R: person(given="Alfonso", family="Cano",
+        email="alfonso.cano@correo.buap.mx", role=c("aut", "cre"))

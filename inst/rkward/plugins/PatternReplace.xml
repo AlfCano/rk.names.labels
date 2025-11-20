@@ -1,0 +1,38 @@
+<!DOCTYPE rkplugin >
+<document>
+	<!--
+		this code was generated using the rkwarddev package.
+	perhaps don't make changes here, but in the rkwarddev script instead!
+	-->
+	<code file="PatternReplace.js" />
+	<help file="PatternReplace.rkh" />
+	<!--
+		<dependencies>
+		</dependencies>
+	-->
+	<logic>
+		<!--
+			<convert id="!edit!" sources="!edit!" mode="equals" standard="!edit!" />
+		-->
+		<!--
+			<connect governor="!edit!.state" client="!edit!.enabled" />
+		-->
+	</logic>
+	<dialog label="Pattern Replacement">
+		<row id="row_vSDFLSSPRR">
+			<varselector id="vars" />
+			<column id="clm_vSDFLSSPRR">
+				<varslot id="rp_obj" label="Select Data Frame or List" source="vars" classes="data.frame list" required="true" />
+				<frame label="Substitution" id="frm_Substttn">
+					<input label="Pattern (Regex)" id="rp_pattern" />
+					<input label="Replacement" id="rp_replace" />
+				</frame>
+				<radio id="rp_scope" label="Scope">
+					<option label="Names" value="names" checked="true" />
+					<option label="Labels" value="labels" />
+				</radio>
+				<saveobject label="Save result as" checkable="true" checked="true" initial="replaced_data" id="rp_save_res" />
+			</column>
+		</row>
+	</dialog>
+</document>

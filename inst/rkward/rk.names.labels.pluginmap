@@ -1,0 +1,137 @@
+<!DOCTYPE
+	rkpluginmap
+>
+<document
+	base_prefix=""
+	namespace="TidyNamesandLabels"
+	id="TidyNamesandLabels_rkward"
+	po_id="TidyNamesandLabels_rkward"
+	priority="medium"
+>
+	<!--
+		this code was generated using the rkwarddev package.
+	perhaps don't make changes here, but in the rkwarddev script instead!
+	-->
+	<!--
+		<dependencies>
+		</dependencies>
+	-->
+	<about
+		name="rk.names.labels"
+		shortinfo="A plugin package to clean and create names and labels of variables of a data.frame or manipulate names in a list in the Rkward GUI."
+		longinfo="A plugin package to clean and create names and labels of variables of a data.frame or manipulate names in a list in the Rkward GUI."
+		version="0.0.1"
+		releasedate="2025-11-19"
+		url="https://github.com/AlfCano/rk.names.labels"
+		license="GPL (&gt;= 3)"
+	>
+		<author
+			given="Alfonso"
+			family="Cano"
+			email="alfonso.cano@correo.buap.mx"
+			role="aut, cre"
+		/>
+	</about>
+	<require
+		map="rkward::menu"
+	/>
+	<require
+		map="rkward::embedded"
+	/>
+	<components>
+		<component
+			id="cmp_TidyNamesandLblsPttrnRplc"
+			label="Pattern Replace"
+			type="standard"
+			file="plugins/PatternReplace.xml"
+		>
+		</component>
+		<component
+			id="cmp_TidyNamesandLabelsSqncRnm"
+			label="Sequence Rename"
+			type="standard"
+			file="plugins/SequenceRename.xml"
+		>
+		</component>
+		<component
+			id="cmp_TidyNamesandLblsDctnryLkp"
+			label="Dictionary Lookup"
+			type="standard"
+			file="plugins/DictionaryLookup.xml"
+		>
+		</component>
+		<component
+			id="cmp_TidyNmsndLblsTdyNmsndLbls"
+			label="Tidy Names and Labels"
+			type="standard"
+			file="plugins/TidyNamesandLabels.xml"
+		>
+		</component>
+	</components>
+	<hierarchy>
+		<menu
+			id="data"
+			label="Data"
+		>
+			<menu
+				id="NamesandLabels"
+				label="Names and Labels"
+			>
+				<entry
+					component="cmp_TidyNamesandLblsPttrnRplc"
+				/>
+			</menu>
+		</menu>
+		<menu
+			id="data"
+			label="Data"
+		>
+			<menu
+				id="NamesandLabels"
+				label="Names and Labels"
+			>
+				<entry
+					component="cmp_TidyNamesandLabelsSqncRnm"
+				/>
+			</menu>
+		</menu>
+		<menu
+			id="data"
+			label="Data"
+		>
+			<menu
+				id="NamesandLabels"
+				label="Names and Labels"
+			>
+				<entry
+					component="cmp_TidyNamesandLblsDctnryLkp"
+				/>
+			</menu>
+		</menu>
+		<menu
+			id="data"
+			label="Data"
+		>
+			<menu
+				id="NamesandLabels"
+				label="Names and Labels"
+			>
+				<entry
+					component="cmp_TidyNmsndLblsTdyNmsndLbls"
+				/>
+			</menu>
+		</menu>
+	</hierarchy>
+	<!--
+		<context
+			id="x11"
+		>
+		</context>
+	-->
+	<!--
+		<context
+			id="import"
+		>
+		</context>
+	-->
+</document>
