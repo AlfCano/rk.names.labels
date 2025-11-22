@@ -1,6 +1,6 @@
 # rk.names.labels: Data Cleaning & Labeling Tools for RKWard
 
-![Version](https://img.shields.io/badge/Version-0.0.3-blue.svg)
+![Version](https://img.shields.io/badge/Version-0.0.4-blue.svg)
 ![License](https://img.shields.io/badge/License-GPL--3-green.svg)
 ![R Version](https://img.shields.io/badge/R-%3E%3D%203.0.0-lightgrey.svg)
 
@@ -30,7 +30,8 @@ This package installs a new submenu in RKWard: **Data > Names and Labels**.
 
 *   **Dictionary Lookup:** Automate labeling using a codebook.
     *   Select a target data frame and a "dictionary" data frame.
-    *   Map variable names to descriptive labels using a Key/Value matching system (via the `lookup` package).
+    *   **New in v0.0.4:** Select the Key (variable name) and Value (label) columns directly using drag-and-drop slots.
+    *   Maps descriptive labels using a Key/Value matching system (via the `lookup` package).
 
 ### Submenu: Value labels (levels)
 *   **Catalog Assignment:** Applies value labels to factor levels using reference catalogs.
