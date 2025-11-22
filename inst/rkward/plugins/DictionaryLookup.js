@@ -15,13 +15,13 @@ function calculate(is_preview){
 	// the R code to be evaluated
 
     var target = getValue("dl_target");
-    var dict = getValue("dl_dict");
-    var key = getValue("dl_key_col");
-    var val = getValue("dl_val_col");
+    var key_vec = getValue("dl_key_col");
+    var val_vec = getValue("dl_val_col");
+    
     var code = "res_obj <- " + target + "\n";
-    code += "dict_df <- " + dict + "\n";
-    code += "keys <- dict_df[[\"" + key + "\"]]\n";
-    code += "vals <- dict_df[[\"" + val + "\"]]\n";
+    code += "keys <- " + key_vec + "\n";
+    code += "vals <- " + val_vec + "\n";
+    
     code += "for(col_name in names(res_obj)) {\n";
     code += "   match_idx <- match(col_name, keys)\n";
     code += "   if(!is.na(match_idx)) {\n";

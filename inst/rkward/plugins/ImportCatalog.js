@@ -17,10 +17,10 @@ function calculate(is_preview){
     var dir = getValue("ic_dir");
     var pattern = getValue("ic_pattern");
     var enc = getValue("ic_encoding");
-
+    
     // FIXED: Double escaping for correct R string generation (\\\\ -> \\ -> \. in R)
     if(pattern == "") pattern = "\\\\.csv$";
-
+    
     var code = "iconv.recursive <- function (x, from) {\n";
     code += "    attribs <- attributes (x)\n";
     code += "    if (is.character (x)) {\n";
@@ -43,7 +43,7 @@ function calculate(is_preview){
     code += "   key_name <- tools::file_path_sans_ext(basename(f))\n";
     code += "   res_list[[key_name]] <- dat\n";
     code += "}\n";
-
+    
     code += "catalog_list <- res_list\n";
     echo(code);
   

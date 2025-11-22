@@ -20,10 +20,10 @@
 		<caption id="frm_Data" />
 		<setting id="dl_target">
 		</setting>
-		<caption id="frm_Dictinry" />
+		<caption id="frm_DctnrySr" />
 		<setting id="dl_dict">
 		</setting>
-		<caption id="frm_Columns" />
+		<caption id="frm_DctnryCl" />
 		<setting id="dl_key_col">
 		</setting>
 		<setting id="dl_val_col">

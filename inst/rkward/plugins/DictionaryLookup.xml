@@ -19,18 +19,18 @@
 		-->
 	</logic>
 	<dialog label="Dictionary Label Lookup">
-		<row id="row_vDDTDFDDDD">
+		<row id="row_vDDTDFDSDS">
 			<varselector id="vars" />
-			<column id="clm_fDDTDFDDDD">
+			<column id="clm_fDDTDFDSDS">
 				<frame label="Data" id="frm_Data">
 					<varslot id="dl_target" label="Target Data Frame" source="vars" classes="data.frame" required="true" />
 				</frame>
-				<frame label="Dictionary" id="frm_Dictinry">
+				<frame label="Dictionary Source" id="frm_DctnrySr">
 					<varslot id="dl_dict" label="Dictionary Data Frame" source="vars" classes="data.frame" required="true" />
 				</frame>
-				<frame label="Columns" id="frm_Columns">
-					<input label="Dictionary Key Column" id="dl_key_col" required="true" />
-					<input label="Dictionary Value Column" id="dl_val_col" required="true" />
+				<frame label="Dictionary Columns" id="frm_DctnryCl">
+					<varslot id="dl_key_col" label="Dictionary Key Column (Variable Names)" source="vars" required="true" />
+					<varslot id="dl_val_col" label="Dictionary Value Column (Labels)" source="vars" required="true" />
 				</frame>
 				<saveobject label="Save Target as" checkable="true" checked="true" initial="labeled_data" id="dl_save" />
 			</column>

@@ -1,6 +1,6 @@
 # Golden Rules of RKWard Plugin Development (Revised & Extended)
 # Plugin: rk.names.labels (Data Tidy: Names and Labels)
-# STATUS: FIXED (Corrected backslash escaping for Import Catalog regex default)
+# STATUS: FIXED (Dictionary Lookup now uses varslots for columns; Version 0.0.4)
 
 local({
   # =========================================================================================
@@ -19,7 +19,7 @@ local({
     ),
     about = list(
       desc = "A plugin package to clean and create names and labels of variables of a data.frame or manipulate names in a list in the Rkward GUI.",
-      version = "0.0.3",
+      version = "0.0.4",
       url = "https://github.com/AlfCano/rk.names.labels",
       license = "GPL (>= 3)"
     )
@@ -265,29 +265,40 @@ local({
   component_sr <- rk.plugin.component("Sequence Rename", xml = list(dialog = sr_dialog), js = list(require = "tibble", calculate = js_calc_sr, printout = js_print_sr), rkh = list(help = help_sr), hierarchy = list("data", "Names and Labels"))
 
   # =========================================================================================
-  # Component 4: Dictionary Lookup
+  # Component 4: Dictionary Lookup (UPDATED: Varslots for Columns)
   # =========================================================================================
 
   dl_target <- rk.XML.varslot("Target Data Frame", source = var_select, required = TRUE, classes = "data.frame", id.name = "dl_target")
   dl_dict <- rk.XML.varslot("Dictionary Data Frame", source = var_select, required = TRUE, classes = "data.frame", id.name = "dl_dict")
-  dl_key <- rk.XML.input("Dictionary Key Column", id.name = "dl_key_col", required = TRUE)
-  dl_val <- rk.XML.input("Dictionary Value Column", id.name = "dl_val_col", required = TRUE)
+
+  # FIXED: Changed from Input to Varslot to allow selecting columns
+  dl_key <- rk.XML.varslot("Dictionary Key Column (Variable Names)", source = var_select, required = TRUE, id.name = "dl_key_col")
+  dl_val <- rk.XML.varslot("Dictionary Value Column (Labels)", source = var_select, required = TRUE, id.name = "dl_val_col")
+
   dl_save <- rk.XML.saveobj("Save Target as", chk=TRUE, initial="labeled_data", id.name="dl_save")
 
   dl_dialog <- rk.XML.dialog(
     label = "Dictionary Label Lookup",
-    child = rk.XML.row(var_select, rk.XML.col(rk.XML.frame(dl_target, label="Data"), rk.XML.frame(dl_dict, label="Dictionary"), rk.XML.frame(dl_key, dl_val, label="Columns"), dl_save))
+    child = rk.XML.row(
+      var_select,
+      rk.XML.col(
+        rk.XML.frame(dl_target, label="Data"),
+        rk.XML.frame(dl_dict, label="Dictionary Source"),
+        rk.XML.frame(dl_key, dl_val, label="Dictionary Columns"),
+        dl_save
+      )
+    )
   )
 
   js_calc_dl <- '
     var target = getValue("dl_target");
-    var dict = getValue("dl_dict");
-    var key = getValue("dl_key_col");
-    var val = getValue("dl_val_col");
+    var key_vec = getValue("dl_key_col");
+    var val_vec = getValue("dl_val_col");
+
     var code = "res_obj <- " + target + "\\n";
-    code += "dict_df <- " + dict + "\\n";
-    code += "keys <- dict_df[[\\\"" + key + "\\\"]]\\n";
-    code += "vals <- dict_df[[\\\"" + val + "\\\"]]\\n";
+    code += "keys <- " + key_vec + "\\n";
+    code += "vals <- " + val_vec + "\\n";
+
     code += "for(col_name in names(res_obj)) {\\n";
     code += "   match_idx <- match(col_name, keys)\\n";
     code += "   if(!is.na(match_idx)) {\\n";
@@ -303,8 +314,12 @@ local({
   help_dl <- rk.rkh.doc(
       title = rk.rkh.title("Dictionary Label Lookup"),
       summary = rk.rkh.summary("Label variables based on a dictionary dataframe."),
-      usage = rk.rkh.usage("Match keys in a dictionary to variable names."),
-      settings = rk.rkh.settings(rk.rkh.setting(id="dl_target", text="Target data."))
+      usage = rk.rkh.usage("Select the dictionary dataframe and specifically drag the key/value columns to the respective slots."),
+      settings = rk.rkh.settings(
+        rk.rkh.setting(id="dl_target", text="Target data."),
+        rk.rkh.setting(id="dl_key_col", text="Column containing the variable names (Key)."),
+        rk.rkh.setting(id="dl_val_col", text="Column containing the new labels (Value).")
+      )
   )
 
   component_dl <- rk.plugin.component("Dictionary Lookup", xml = list(dialog = dl_dialog), js = list(require = "lookup", calculate = js_calc_dl, printout = js_print_dl), rkh = list(help = help_dl), hierarchy = list("data", "Names and Labels"))
@@ -362,7 +377,7 @@ local({
   component_vl <- rk.plugin.component("Catalog Assignment", xml = list(dialog = vl_dialog), js = list(require = "lookup", calculate = js_calc_vl, printout = js_print_vl), rkh = list(help = help_vl), hierarchy = list("data", "Names and Labels", "Value labels (levels)"))
 
   # =========================================================================================
-  # Component 6: Import Catalog (FIXED REGEX)
+  # Component 6: Import Catalog
   # =========================================================================================
 
   ic_dir <- rk.XML.browser("Select Directory (containing CSVs)", type = "dir", required = TRUE, id.name = "ic_dir")

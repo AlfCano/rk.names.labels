@@ -20,7 +20,7 @@
 		name="rk.names.labels"
 		shortinfo="A plugin package to clean and create names and labels of variables of a data.frame or manipulate names in a list in the Rkward GUI."
 		longinfo="A plugin package to clean and create names and labels of variables of a data.frame or manipulate names in a list in the Rkward GUI."
-		version="0.0.3"
+		version="0.0.4"
 		releasedate="2025-11-21"
 		url="https://github.com/AlfCano/rk.names.labels"
 		license="GPL (&gt;= 3)"
