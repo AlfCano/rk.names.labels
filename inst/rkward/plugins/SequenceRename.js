@@ -18,7 +18,6 @@ function calculate(is_preview){
     var cols = getValue("sr_cols").split("\n");
     var mode = getValue("sr_mode");
     var code = "res_obj <- " + df + "\n";
-
     if(mode == "seq") {
         var prefix = getValue("sr_prefix");
         var suffix = getValue("sr_suffix");
@@ -37,7 +36,6 @@ function calculate(is_preview){
         var strategy = getValue("sr_repair");
         code += "res_obj <- tibble::as_tibble(res_obj, .name_repair = \"" + strategy + "\")\n";
     }
-    // RULE 3: Unconditional assignment to hard-coded name "renamed_df"
     code += "renamed_df <- res_obj\n";
     echo(code);
   
@@ -46,9 +44,7 @@ function calculate(is_preview){
 function printout(is_preview){
 	// printout the results
 	new Header(i18n("Sequence Rename results")).print();
-
-    echo("rk.header(\"Sequence Rename / Repair process completed.\")\n");
-  
+echo("rk.header(\"Sequence Rename / Repair process completed.\")\n");
 	//// save result object
 	// read in saveobject variables
 	var srSave = getValue("sr_save");

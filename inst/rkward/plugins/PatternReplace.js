@@ -33,7 +33,6 @@ function calculate(is_preview){
             code += "}\n";
         }
     }
-    // RULE 3: Unconditional assignment to hard-coded name "replaced_data"
     code += "replaced_data <- res_obj\n";
     echo(code);
   
@@ -42,9 +41,7 @@ function calculate(is_preview){
 function printout(is_preview){
 	// printout the results
 	new Header(i18n("Pattern Replace results")).print();
-
-    echo("rk.header(\"Pattern Replacement process completed.\")\n");
-  
+echo("rk.header(\"Pattern Replacement process completed.\")\n");
 	//// save result object
 	// read in saveobject variables
 	var rpSaveRes = getValue("rp_save_res");

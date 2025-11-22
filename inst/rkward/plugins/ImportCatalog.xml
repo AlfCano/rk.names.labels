@@ -1,0 +1,39 @@
+<!DOCTYPE rkplugin >
+<document>
+	<!--
+		this code was generated using the rkwarddev package.
+	perhaps don't make changes here, but in the rkwarddev script instead!
+	-->
+	<code file="ImportCatalog.js" />
+	<help file="ImportCatalog.rkh" />
+	<!--
+		<dependencies>
+		</dependencies>
+	-->
+	<logic>
+		<!--
+			<convert id="!edit!" sources="!edit!" mode="equals" standard="!edit!" />
+		-->
+		<!--
+			<connect governor="!edit!.state" client="!edit!.enabled" />
+		-->
+	</logic>
+	<dialog label="Import Catalog">
+		<column id="clm_fSDSDSDCSV">
+			<frame label="Source Directory" id="frm_SrcDrctr">
+				<browser label="Select Directory (containing CSVs)" type="dir" id="ic_dir" />
+			</frame>
+			<frame label="File Options" id="frm_FilOptns">
+				<input label="File Pattern (Regex)" id="ic_pattern" />
+				<text id="txt_DfltcCSV">
+					Default: .csv$ (matches CSV files)
+				</text>
+				<dropdown id="ic_encoding" label="Encoding">
+					<option label="UTF-8" value="UTF-8" checked="true" />
+					<option label="Latin1" value="latin1" />
+				</dropdown>
+			</frame>
+			<saveobject label="Save Catalog List as" checkable="true" checked="true" initial="catalog_list" id="ic_save" />
+		</column>
+	</dialog>
+</document>

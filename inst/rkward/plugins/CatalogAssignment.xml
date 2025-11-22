@@ -1,0 +1,39 @@
+<!DOCTYPE rkplugin >
+<document>
+	<!--
+		this code was generated using the rkwarddev package.
+	perhaps don't make changes here, but in the rkwarddev script instead!
+	-->
+	<code file="CatalogAssignment.js" />
+	<help file="CatalogAssignment.rkh" />
+	<!--
+		<dependencies>
+		</dependencies>
+	-->
+	<logic>
+		<!--
+			<convert id="!edit!" sources="!edit!" mode="equals" standard="!edit!" />
+		-->
+		<!--
+			<connect governor="!edit!.state" client="!edit!.enabled" />
+		-->
+	</logic>
+	<dialog label="Catalog Assignment">
+		<row id="row_vTDTDTDFCS">
+			<varselector id="vars" />
+			<column id="clm_fTDTDTDFCS">
+				<frame label="Target Data" id="frm_TargetDt">
+					<varslot id="vl_target" label="Target Data Frame" source="vars" classes="data.frame" required="true" />
+				</frame>
+				<frame label="Catalog Source" id="frm_CatlgSrc">
+					<varslot id="vl_catalogs" label="Catalog Source (List or Data Frame)" source="vars" classes="list data.frame" required="true" />
+				</frame>
+				<frame label="Catalog Structure" id="frm_CtlgStrc">
+					<input label="Key Column (in catalogs)" id="vl_key" initial="CVE" />
+					<input label="Value Column (in catalogs)" id="vl_val" initial="descrip" />
+				</frame>
+				<saveobject label="Save result as" checkable="true" checked="true" initial="labeled_levels" id="vl_save" />
+			</column>
+		</row>
+	</dialog>
+</document>

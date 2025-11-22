@@ -1,6 +1,6 @@
 # Golden Rules of RKWard Plugin Development (Revised & Extended)
 # Plugin: rk.names.labels (Data Tidy: Names and Labels)
-# STATUS: FIXED (Added Syntactic, Unique, and Universal options to Tidy component)
+# STATUS: FIXED (Corrected backslash escaping for Import Catalog regex default)
 
 local({
   # =========================================================================================
@@ -19,7 +19,7 @@ local({
     ),
     about = list(
       desc = "A plugin package to clean and create names and labels of variables of a data.frame or manipulate names in a list in the Rkward GUI.",
-      version = "0.0.1",
+      version = "0.0.3",
       url = "https://github.com/AlfCano/rk.names.labels",
       license = "GPL (>= 3)"
     )
@@ -32,12 +32,12 @@ local({
   var_select <- rk.XML.varselector(id.name = "vars")
 
   # =========================================================================================
-  # Component 1: Tidy Names and Labels (Main Transformation)
+  # Component 1: Tidy Names and Labels
   # =========================================================================================
 
   tn_target <- rk.XML.varslot("Select Data Frame or List", source = var_select, required = TRUE, classes = c("data.frame", "list"), id.name = "tn_obj")
 
-  # 1. Name Repair Strategy (Comprehensive)
+  # 1. Name Repair
   tn_repair <- rk.XML.dropdown("Name Repair Strategy (Names Only)", options = list(
     "None" = list(val = "none", chk = TRUE),
     "Janitor (snake_case)" = list(val = "janitor"),
@@ -53,14 +53,14 @@ local({
     "Uppercase (toupper)" = list(val = "upper")
   ), id.name = "tn_case_method")
 
-  # 3. Scope Selection
+  # 3. Scope
   tn_scope <- rk.XML.dropdown("Apply Transformations To", options = list(
       "Names Only" = list(val = "names", chk = TRUE),
       "Labels Only" = list(val = "labels"),
       "Both Names and Labels" = list(val = "both")
   ), id.name = "tn_scope")
 
-  # 4. String Cleaning
+  # 4. Cleanup
   tn_stringr <- rk.XML.row(
     rk.XML.col(
       rk.XML.cbox("Trim Whitespace (str_trim)", value = "1", id.name = "tn_trim"),
@@ -75,10 +75,8 @@ local({
     label = "Additional Actions"
   )
 
-  # RULE 3: Hard-coded result name must match this initial value
   tn_save <- rk.XML.saveobj("Save result as", chk = TRUE, initial = "tidy_data", id.name = "tn_save_res")
 
-  # Dialog with Tabs
   tn_dialog <- rk.XML.dialog(
     label = "Tidy Names and Labels",
     child = rk.XML.row(
@@ -89,17 +87,10 @@ local({
             "Transformations" = rk.XML.col(
                 rk.XML.frame(tn_repair, label = "Structure & Repair"),
                 rk.XML.frame(tn_case, label = "Case Conversion"),
-                rk.XML.frame(
-                    tn_scope,
-                    tn_stringr,
-                    label = "Scope and Cleanup"
-                ),
+                rk.XML.frame(tn_scope, tn_stringr, label = "Scope and Cleanup"),
                 tn_warning
             ),
-            "Output" = rk.XML.col(
-                tn_actions,
-                tn_save
-            )
+            "Output" = rk.XML.col(tn_actions, tn_save)
         ))
       )
     )
@@ -117,7 +108,6 @@ local({
     var code = "res_obj <- " + obj + "\\n";
     code += "current_names <- names(res_obj)\\n";
 
-    // 1. Name Repair (Strictly Names, applied first)
     if(repair_method == "janitor") {
         code += "res_obj <- janitor::clean_names(res_obj)\\n";
         code += "current_names <- names(res_obj)\\n";
@@ -129,84 +119,46 @@ local({
         code += "current_names <- vctrs::vec_as_names(current_names, repair = \\"universal\\", quiet = TRUE)\\n";
     }
 
-    // 2. Process Names (If Scope includes Names)
     if(scope == "names" || scope == "both") {
-        // A. Case
-        if(case_method == "lower") {
-            code += "current_names <- tolower(current_names)\\n";
-        } else if (case_method == "upper") {
-            code += "current_names <- toupper(current_names)\\n";
-        }
-
-        // B. Trim/Squish
-        if(do_trim == "1") {
-            code += "current_names <- stringr::str_trim(current_names)\\n";
-        }
-        if(do_squish == "1") {
-            code += "current_names <- stringr::str_squish(current_names)\\n";
-        }
+        if(case_method == "lower") code += "current_names <- tolower(current_names)\\n";
+        if(case_method == "upper") code += "current_names <- toupper(current_names)\\n";
+        if(do_trim == "1") code += "current_names <- stringr::str_trim(current_names)\\n";
+        if(do_squish == "1") code += "current_names <- stringr::str_squish(current_names)\\n";
     }
-
-    // Apply name changes
     code += "names(res_obj) <- current_names\\n";
 
-    // 3. Process Labels (If Scope includes Labels)
     if(scope == "labels" || scope == "both") {
          if(case_method != "none" || do_trim == "1" || do_squish == "1") {
-             code += "# Cleaning Labels\\n";
              code += "for(n in names(res_obj)) {\\n";
              code += "  curr_lab <- rk.get.label(res_obj[[n]])\\n";
              code += "  if(!is.null(curr_lab) && !is.na(curr_lab)) {\\n";
-
-             if(case_method == "lower") {
-                code += "    curr_lab <- tolower(curr_lab)\\n";
-             } else if (case_method == "upper") {
-                code += "    curr_lab <- toupper(curr_lab)\\n";
-             }
-
-             if(do_trim == "1") {
-                 code += "    curr_lab <- stringr::str_trim(curr_lab)\\n";
-             }
-             if(do_squish == "1") {
-                 code += "    curr_lab <- stringr::str_squish(curr_lab)\\n";
-             }
-
+             if(case_method == "lower") code += "    curr_lab <- tolower(curr_lab)\\n";
+             if(case_method == "upper") code += "    curr_lab <- toupper(curr_lab)\\n";
+             if(do_trim == "1") code += "    curr_lab <- stringr::str_trim(curr_lab)\\n";
+             if(do_squish == "1") code += "    curr_lab <- stringr::str_squish(curr_lab)\\n";
              code += "    rk.set.label(res_obj[[n]], curr_lab)\\n";
              code += "  }\\n";
              code += "}\\n";
          }
     }
 
-    // 4. Copy Names to Labels (Overrides previous label cleaning if active)
     if(copy_labels == "1") {
-       code += "# Copying names to variable labels\\n";
        code += "for(n in names(res_obj)) {\\n";
-       code += "  if(!is.null(res_obj[[n]])) {\\n";
-       code += "    rk.set.label(res_obj[[n]], n)\\n";
-       code += "  }\\n";
+       code += "  if(!is.null(res_obj[[n]])) rk.set.label(res_obj[[n]], n)\\n";
        code += "}\\n";
     }
-
-    // RULE 3: Unconditional assignment to hard-coded name "tidy_data"
     code += "tidy_data <- res_obj\\n";
     echo(code);
   '
-
-  js_print_tn <- '
-    echo("rk.header(\\"Tidy Names and Labels process completed.\\")\\n");
-  '
+  js_print_tn <- 'echo("rk.header(\\"Tidy Names and Labels process completed.\\")\\n");'
 
   help_tn <- rk.rkh.doc(
     title = rk.rkh.title("Tidy Names and Labels"),
-    summary = rk.rkh.summary("Provides tools to clean variable names and labels in data.frames or lists using standard R methods, 'janitor', and 'stringr'."),
-    usage = rk.rkh.usage("Select a data.frame. Choose a name repair strategy (names only), then configure Case and Whitespace options which can apply to names, labels, or both."),
+    summary = rk.rkh.summary("Provides tools to clean variable names and labels using standard R methods, 'janitor', and 'stringr'."),
+    usage = rk.rkh.usage("Select a data.frame. Configure repair strategies and string cleaning options."),
     settings = rk.rkh.settings(
-        rk.rkh.setting(id = "tn_repair_method", text = "Method to standardise structure: Janitor (snake_case), Syntactic (valid R names), Unique, or Universal (robust)."),
-        rk.rkh.setting(id = "tn_case_method", text = "Convert text to Lowercase or Uppercase."),
-        rk.rkh.setting(id = "tn_scope", text = "Determines whether Case and Whitespace rules apply to Names, Labels, or Both."),
-        rk.rkh.setting(id = "tn_trim", text = "Removes leading and trailing whitespace."),
-        rk.rkh.setting(id = "tn_squish", text = "Reduces repeated internal whitespace to a single space."),
-        rk.rkh.setting(id = "tn_copy_to_label", text = "If checked, overwrites the variable label with its new name.")
+        rk.rkh.setting(id = "tn_repair_method", text = "Method to standardise structure (Names only)."),
+        rk.rkh.setting(id = "tn_scope", text = "Apply rules to Names, Labels, or Both.")
     )
   )
 
@@ -218,16 +170,11 @@ local({
   rp_pattern <- rk.XML.input("Pattern (Regex)", id.name = "rp_pattern")
   rp_replace <- rk.XML.input("Replacement", id.name = "rp_replace")
   rp_scope <- rk.XML.radio("Scope", options = list("Names" = list(val = "names", chk = TRUE), "Labels" = list(val = "labels")), id.name = "rp_scope")
-
-  # RULE 3: Hard-coded result name must match this initial value
   rp_save <- rk.XML.saveobj("Save result as", chk = TRUE, initial = "replaced_data", id.name = "rp_save_res")
 
   rp_dialog <- rk.XML.dialog(
     label = "Pattern Replacement",
-    child = rk.XML.row(
-      var_select,
-      rk.XML.col(rp_target, rk.XML.frame(rp_pattern, rp_replace, label = "Substitution"), rp_scope, rp_save)
-    )
+    child = rk.XML.row(var_select, rk.XML.col(rp_target, rk.XML.frame(rp_pattern, rp_replace, label="Substitution"), rp_scope, rp_save))
   )
 
   js_calc_rp <- '
@@ -250,24 +197,16 @@ local({
             code += "}\\n";
         }
     }
-    // RULE 3: Unconditional assignment to hard-coded name "replaced_data"
     code += "replaced_data <- res_obj\\n";
     echo(code);
   '
-
-  js_print_rp <- '
-    echo("rk.header(\\"Pattern Replacement process completed.\\")\\n");
-  '
+  js_print_rp <- 'echo("rk.header(\\"Pattern Replacement process completed.\\")\\n");'
 
   help_rp <- rk.rkh.doc(
     title = rk.rkh.title("Pattern Replacement"),
-    summary = rk.rkh.summary("Performs regex pattern matching and replacement on names or labels."),
-    usage = rk.rkh.usage("Select a data object, enter a regex pattern, and the replacement text."),
-    settings = rk.rkh.settings(
-        rk.rkh.setting(id = "rp_scope", text = "Choose whether to apply replacements to the object's column names or the variables' labels."),
-        rk.rkh.setting(id = "rp_pattern", text = "The regular expression or string to search for."),
-        rk.rkh.setting(id = "rp_replace", text = "The text to replace matches with.")
-    )
+    summary = rk.rkh.summary("Performs regex pattern matching and replacement."),
+    usage = rk.rkh.usage("Select a data object and define regex patterns."),
+    settings = rk.rkh.settings(rk.rkh.setting(id="rp_pattern", text="Regex pattern."))
   )
 
   component_rp <- rk.plugin.component("Pattern Replace", xml = list(dialog = rp_dialog), js = list(require = "stringr", calculate = js_calc_rp, printout = js_print_rp), rkh = list(help = help_rp), hierarchy = list("data", "Names and Labels"))
@@ -279,35 +218,13 @@ local({
   sr_target_df <- rk.XML.varslot("Select Data Frame", source = var_select, required=TRUE, classes="data.frame", id.name="sr_df")
   sr_cols <- rk.XML.varslot("Select Columns to Rename", source = var_select, required=TRUE, multi=TRUE, id.name="sr_cols")
   sr_mode <- rk.XML.radio("Mode", options = list("Sequence" = list(val = "seq", chk = TRUE), "Tibble Repair" = list(val = "tibble")), id.name = "sr_mode")
-
-  sr_opts <- rk.XML.frame(
-    rk.XML.input("Prefix", initial = "Var", id.name = "sr_prefix"),
-    rk.XML.input("Suffix", id.name = "sr_suffix"),
-    rk.XML.spinbox("Start Number", min = 1, initial = 1, id.name = "sr_start")
-  )
-
+  sr_opts <- rk.XML.frame(rk.XML.input("Prefix", initial = "Var", id.name = "sr_prefix"), rk.XML.input("Suffix", id.name = "sr_suffix"), rk.XML.spinbox("Start Number", min = 1, initial = 1, id.name = "sr_start"))
   sr_tibble_opts <- rk.XML.dropdown("Repair Strategy", options = list("Universal" = list(val = "universal", chk = TRUE), "Unique" = list(val = "unique")), id.name = "sr_repair")
-
-  # RULE 3: Hard-coded result name must match this initial value
   sr_save <- rk.XML.saveobj("Save Result", initial="renamed_df", id.name="sr_save")
 
-  # Dialog with Tabs
   sr_dialog <- rk.XML.dialog(
       label = "Sequence Rename",
-      child = rk.XML.row(
-          var_select,
-          rk.XML.col(
-            rk.XML.tabbook(tabs = list(
-                "Selection" = rk.XML.col(sr_target_df, sr_cols),
-                "Configuration" = rk.XML.col(
-                    sr_mode,
-                    rk.XML.frame(sr_opts, label="Sequence Options"),
-                    rk.XML.frame(sr_tibble_opts, label="Tibble Repair")
-                ),
-                "Output" = rk.XML.col(sr_save)
-            ))
-          )
-      )
+      child = rk.XML.row(var_select, rk.XML.col(rk.XML.tabbook(tabs = list("Selection"=rk.XML.col(sr_target_df, sr_cols), "Configuration"=rk.XML.col(sr_mode, rk.XML.frame(sr_opts, label="Sequence Options"), rk.XML.frame(sr_tibble_opts, label="Tibble Repair")), "Output"=rk.XML.col(sr_save)))))
   )
 
   js_calc_sr <- '
@@ -315,7 +232,6 @@ local({
     var cols = getValue("sr_cols").split("\\n");
     var mode = getValue("sr_mode");
     var code = "res_obj <- " + df + "\\n";
-
     if(mode == "seq") {
         var prefix = getValue("sr_prefix");
         var suffix = getValue("sr_suffix");
@@ -334,23 +250,16 @@ local({
         var strategy = getValue("sr_repair");
         code += "res_obj <- tibble::as_tibble(res_obj, .name_repair = \\\"" + strategy + "\\\")\\n";
     }
-    // RULE 3: Unconditional assignment to hard-coded name "renamed_df"
     code += "renamed_df <- res_obj\\n";
     echo(code);
   '
-
-  js_print_sr <- '
-    echo("rk.header(\\"Sequence Rename / Repair process completed.\\")\\n");
-  '
+  js_print_sr <- 'echo("rk.header(\\"Sequence Rename / Repair process completed.\\")\\n");'
 
   help_sr <- rk.rkh.doc(
     title = rk.rkh.title("Sequence Rename"),
     summary = rk.rkh.summary("Renames specific columns or applies tibble repair."),
-    usage = rk.rkh.usage("Select a dataframe and columns. Choose Sequence or Tibble Repair."),
-    settings = rk.rkh.settings(
-        rk.rkh.setting(id = "sr_mode", text = "Switch between sequential renaming of selected columns or full-table tibble name repair."),
-        rk.rkh.setting(id = "sr_repair", text = "Tibble naming strategy (universal, unique, etc.)")
-    )
+    usage = rk.rkh.usage("Select columns to rename or apply global name repair."),
+    settings = rk.rkh.settings(rk.rkh.setting(id="sr_mode", text="Renaming mode."))
   )
 
   component_sr <- rk.plugin.component("Sequence Rename", xml = list(dialog = sr_dialog), js = list(require = "tibble", calculate = js_calc_sr, printout = js_print_sr), rkh = list(help = help_sr), hierarchy = list("data", "Names and Labels"))
@@ -363,16 +272,11 @@ local({
   dl_dict <- rk.XML.varslot("Dictionary Data Frame", source = var_select, required = TRUE, classes = "data.frame", id.name = "dl_dict")
   dl_key <- rk.XML.input("Dictionary Key Column", id.name = "dl_key_col", required = TRUE)
   dl_val <- rk.XML.input("Dictionary Value Column", id.name = "dl_val_col", required = TRUE)
-
-  # RULE 3: Hard-coded result name must match this initial value
   dl_save <- rk.XML.saveobj("Save Target as", chk=TRUE, initial="labeled_data", id.name="dl_save")
 
   dl_dialog <- rk.XML.dialog(
     label = "Dictionary Label Lookup",
-    child = rk.XML.row(
-      var_select,
-      rk.XML.col(rk.XML.frame(dl_target, label="Data"), rk.XML.frame(dl_dict, label="Dictionary"), rk.XML.frame(dl_key, dl_val, label="Columns"), dl_save)
-    )
+    child = rk.XML.row(var_select, rk.XML.col(rk.XML.frame(dl_target, label="Data"), rk.XML.frame(dl_dict, label="Dictionary"), rk.XML.frame(dl_key, dl_val, label="Columns"), dl_save))
   )
 
   js_calc_dl <- '
@@ -380,12 +284,10 @@ local({
     var dict = getValue("dl_dict");
     var key = getValue("dl_key_col");
     var val = getValue("dl_val_col");
-
     var code = "res_obj <- " + target + "\\n";
     code += "dict_df <- " + dict + "\\n";
     code += "keys <- dict_df[[\\\"" + key + "\\\"]]\\n";
     code += "vals <- dict_df[[\\\"" + val + "\\\"]]\\n";
-
     code += "for(col_name in names(res_obj)) {\\n";
     code += "   match_idx <- match(col_name, keys)\\n";
     code += "   if(!is.na(match_idx)) {\\n";
@@ -393,32 +295,142 @@ local({
     code += "       rk.set.label(res_obj[[col_name]], new_label)\\n";
     code += "   }\\n";
     code += "}\\n";
-
-    // RULE 3: Unconditional assignment to hard-coded name "labeled_data"
     code += "labeled_data <- res_obj\\n";
     echo(code);
   '
-
-  js_print_dl <- '
-    echo("rk.header(\\"Dictionary Labeling process completed.\\")\\n");
-  '
+  js_print_dl <- 'echo("rk.header(\\"Dictionary Labeling process completed.\\")\\n");'
 
   help_dl <- rk.rkh.doc(
       title = rk.rkh.title("Dictionary Label Lookup"),
-      summary = rk.rkh.summary("Matches variable names against a dictionary."),
-      usage = rk.rkh.usage("Select target and dictionary data frames. Enter column names for key and value."),
-      settings = rk.rkh.settings(
-        rk.rkh.setting(id = "dl_target", text = "The data frame whose variables will be labeled."),
-        rk.rkh.setting(id = "dl_dict", text = "The data frame containing the key-value pairs."),
-        rk.rkh.setting(id = "dl_key_col", text = "Name of the column in the dictionary that matches variable names."),
-        rk.rkh.setting(id = "dl_val_col", text = "Name of the column in the dictionary containing the label text.")
-      ),
-      sections = list(
-        rk.rkh.section("Requirements", "Dictionary columns must be valid.")
-      )
+      summary = rk.rkh.summary("Label variables based on a dictionary dataframe."),
+      usage = rk.rkh.usage("Match keys in a dictionary to variable names."),
+      settings = rk.rkh.settings(rk.rkh.setting(id="dl_target", text="Target data."))
   )
 
   component_dl <- rk.plugin.component("Dictionary Lookup", xml = list(dialog = dl_dialog), js = list(require = "lookup", calculate = js_calc_dl, printout = js_print_dl), rkh = list(help = help_dl), hierarchy = list("data", "Names and Labels"))
+
+  # =========================================================================================
+  # Component 5: Catalog Assignment (Formerly Value labels)
+  # =========================================================================================
+
+  vl_target <- rk.XML.varslot("Target Data Frame", source = var_select, required = TRUE, classes = "data.frame", id.name = "vl_target")
+  vl_catalogs <- rk.XML.varslot("Catalog Source (List or Data Frame)", source = var_select, required = TRUE, classes = c("list", "data.frame"), id.name = "vl_catalogs")
+  vl_key <- rk.XML.input("Key Column (in catalogs)", initial="CVE", id.name = "vl_key")
+  vl_val <- rk.XML.input("Value Column (in catalogs)", initial="descrip", id.name = "vl_val")
+  vl_save <- rk.XML.saveobj("Save result as", chk=TRUE, initial="labeled_levels", id.name="vl_save")
+
+  vl_dialog <- rk.XML.dialog(
+    label = "Catalog Assignment",
+    child = rk.XML.row(var_select, rk.XML.col(rk.XML.frame(vl_target, label="Target Data"), rk.XML.frame(vl_catalogs, label="Catalog Source"), rk.XML.frame(vl_key, vl_val, label="Catalog Structure"), vl_save))
+  )
+
+  js_calc_vl <- '
+    var target = getValue("vl_target");
+    var cats = getValue("vl_catalogs");
+    var key = getValue("vl_key");
+    var val = getValue("vl_val");
+    var code = "res_obj <- " + target + "\\n";
+    code += "catalog_source <- " + cats + "\\n";
+    code += "if(is.data.frame(catalog_source)) {\\n";
+    code += "  target_vars <- names(res_obj)\\n";
+    code += "  is_single_cat <- TRUE\\n";
+    code += "} else {\\n";
+    code += "  target_vars <- intersect(names(res_obj), names(catalog_source))\\n";
+    code += "  is_single_cat <- FALSE\\n";
+    code += "}\\n";
+    code += "for(var_name in target_vars) {\\n";
+    code += "  if(is_single_cat) { curr_cat <- catalog_source } else { curr_cat <- catalog_source[[var_name]] }\\n";
+    code += "  if(!is.null(curr_cat) && (is.factor(res_obj[[var_name]]) || is.character(res_obj[[var_name]]))) {\\n";
+    code += "     if(is.character(res_obj[[var_name]])) res_obj[[var_name]] <- as.factor(res_obj[[var_name]])\\n";
+    code += "     current_levels <- levels(res_obj[[var_name]])\\n";
+    code += "     new_levels <- lookup::vlookup(current_levels, curr_cat, \\"" + key + "\\", \\"" + val + "\\")\\n";
+    code += "     levels(res_obj[[var_name]]) <- new_levels\\n";
+    code += "  }\\n";
+    code += "}\\n";
+    code += "labeled_levels <- res_obj\\n";
+    echo(code);
+  '
+  js_print_vl <- 'echo("rk.header(\\"Catalog Assignment process completed.\\")\\n");'
+
+  help_vl <- rk.rkh.doc(
+    title = rk.rkh.title("Catalog Assignment"),
+    summary = rk.rkh.summary("Applies value labels to factors in a data frame using a reference catalog."),
+    usage = rk.rkh.usage("Select target data and catalog list/dataframe."),
+    settings = rk.rkh.settings(rk.rkh.setting(id = "vl_target", text = "Target Data."))
+  )
+
+  component_vl <- rk.plugin.component("Catalog Assignment", xml = list(dialog = vl_dialog), js = list(require = "lookup", calculate = js_calc_vl, printout = js_print_vl), rkh = list(help = help_vl), hierarchy = list("data", "Names and Labels", "Value labels (levels)"))
+
+  # =========================================================================================
+  # Component 6: Import Catalog (FIXED REGEX)
+  # =========================================================================================
+
+  ic_dir <- rk.XML.browser("Select Directory (containing CSVs)", type = "dir", required = TRUE, id.name = "ic_dir")
+
+  # FIXED: Simple label, text node for instructions
+  ic_pattern <- rk.XML.input("File Pattern (Regex)", id.name = "ic_pattern")
+  ic_note <- rk.XML.text("Default: .csv$ (matches CSV files)")
+
+  ic_encoding <- rk.XML.dropdown("Encoding", options = list("UTF-8" = list(val = "UTF-8", chk = TRUE), "Latin1" = list(val = "latin1")), id.name = "ic_encoding")
+  ic_save <- rk.XML.saveobj("Save Catalog List as", chk=TRUE, initial="catalog_list", id.name="ic_save")
+
+  ic_dialog <- rk.XML.dialog(
+    label = "Import Catalog",
+    child = rk.XML.col(
+      rk.XML.frame(ic_dir, label = "Source Directory"),
+      rk.XML.frame(ic_pattern, ic_note, ic_encoding, label = "File Options"),
+      ic_save
+    )
+  )
+
+  js_calc_ic <- '
+    var dir = getValue("ic_dir");
+    var pattern = getValue("ic_pattern");
+    var enc = getValue("ic_encoding");
+
+    // FIXED: Double escaping for correct R string generation (\\\\\\\\ -> \\\\ -> \\. in R)
+    if(pattern == "") pattern = "\\\\\\\\.csv$";
+
+    var code = "iconv.recursive <- function (x, from) {\\n";
+    code += "    attribs <- attributes (x)\\n";
+    code += "    if (is.character (x)) {\\n";
+    code += "        x <- iconv (x, from=from, to=\\"\\", sub=\\"\\")\\n";
+    code += "    } else if (is.list (x)) {\\n";
+    code += "        x <- lapply (x, function (sub) iconv.recursive (sub, from))\\n";
+    code += "    }\\n";
+    code += "    attributes (x) <- lapply (attribs, function (sub) iconv.recursive (sub, from))\\n";
+    code += "    x\\n";
+    code += "}\\n\\n";
+
+    code += "files <- list.files(path = \\"" + dir + "\\", pattern = \\"" + pattern + "\\", full.names = TRUE)\\n";
+    code += "res_list <- list()\\n";
+    code += "for (f in files) {\\n";
+    code += "   # Import data\\n";
+    code += "   dat <- rio::import(f)\\n";
+    code += "   # Convert encoding\\n";
+    code += "   dat <- iconv.recursive(dat, from = \\"" + enc + "\\")\\n";
+    code += "   # Use filename without extension as list key\\n";
+    code += "   key_name <- tools::file_path_sans_ext(basename(f))\\n";
+    code += "   res_list[[key_name]] <- dat\\n";
+    code += "}\\n";
+
+    code += "catalog_list <- res_list\\n";
+    echo(code);
+  '
+
+  js_print_ic <- 'echo("rk.header(\\"Catalog Import process completed.\\")\\n");'
+
+  help_ic <- rk.rkh.doc(
+    title = rk.rkh.title("Import Catalog"),
+    summary = rk.rkh.summary("Batch imports CSV files from a directory into a named list of data frames."),
+    usage = rk.rkh.usage("Select a directory containing CSV files. The plugin will create a List where each item is a dataframe named after the file (minus extension)."),
+    settings = rk.rkh.settings(
+      rk.rkh.setting(id="ic_dir", text="Directory containing the catalog files."),
+      rk.rkh.setting(id="ic_encoding", text="Original character encoding.")
+    )
+  )
+
+  component_ic <- rk.plugin.component("Import Catalog", xml = list(dialog = ic_dialog), js = list(require = "rio", calculate = js_calc_ic, printout = js_print_ic), rkh = list(help = help_ic), hierarchy = list("data", "Names and Labels", "Value labels (levels)"))
 
   # =========================================================================================
   # Main Skeleton Call
@@ -430,7 +442,7 @@ local({
     xml = list(dialog = tn_dialog),
     js = list(require = c("janitor", "stringr", "vctrs"), calculate = js_calc_tn, printout = js_print_tn),
     rkh = list(help = help_tn),
-    components = list(component_rp, component_sr, component_dl),
+    components = list(component_rp, component_sr, component_dl, component_vl, component_ic),
     pluginmap = list(name = "Tidy Names and Labels", hierarchy = list("data", "Names and Labels")),
     create = c("pmap", "xml", "js", "desc", "rkh"),
     load = TRUE,

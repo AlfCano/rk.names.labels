@@ -25,7 +25,6 @@ function calculate(is_preview){
     var code = "res_obj <- " + obj + "\n";
     code += "current_names <- names(res_obj)\n";
 
-    // 1. Name Repair (Strictly Names, applied first)
     if(repair_method == "janitor") {
         code += "res_obj <- janitor::clean_names(res_obj)\n";
         code += "current_names <- names(res_obj)\n";
@@ -37,65 +36,34 @@ function calculate(is_preview){
         code += "current_names <- vctrs::vec_as_names(current_names, repair = \"universal\", quiet = TRUE)\n";
     }
 
-    // 2. Process Names (If Scope includes Names)
     if(scope == "names" || scope == "both") {
-        // A. Case
-        if(case_method == "lower") {
-            code += "current_names <- tolower(current_names)\n";
-        } else if (case_method == "upper") {
-            code += "current_names <- toupper(current_names)\n";
-        }
-
-        // B. Trim/Squish
-        if(do_trim == "1") {
-            code += "current_names <- stringr::str_trim(current_names)\n";
-        }
-        if(do_squish == "1") {
-            code += "current_names <- stringr::str_squish(current_names)\n";
-        }
+        if(case_method == "lower") code += "current_names <- tolower(current_names)\n";
+        if(case_method == "upper") code += "current_names <- toupper(current_names)\n";
+        if(do_trim == "1") code += "current_names <- stringr::str_trim(current_names)\n";
+        if(do_squish == "1") code += "current_names <- stringr::str_squish(current_names)\n";
     }
-
-    // Apply name changes
     code += "names(res_obj) <- current_names\n";
 
-    // 3. Process Labels (If Scope includes Labels)
     if(scope == "labels" || scope == "both") {
          if(case_method != "none" || do_trim == "1" || do_squish == "1") {
-             code += "# Cleaning Labels\n";
              code += "for(n in names(res_obj)) {\n";
              code += "  curr_lab <- rk.get.label(res_obj[[n]])\n";
              code += "  if(!is.null(curr_lab) && !is.na(curr_lab)) {\n";
-
-             if(case_method == "lower") {
-                code += "    curr_lab <- tolower(curr_lab)\n";
-             } else if (case_method == "upper") {
-                code += "    curr_lab <- toupper(curr_lab)\n";
-             }
-
-             if(do_trim == "1") {
-                 code += "    curr_lab <- stringr::str_trim(curr_lab)\n";
-             }
-             if(do_squish == "1") {
-                 code += "    curr_lab <- stringr::str_squish(curr_lab)\n";
-             }
-
+             if(case_method == "lower") code += "    curr_lab <- tolower(curr_lab)\n";
+             if(case_method == "upper") code += "    curr_lab <- toupper(curr_lab)\n";
+             if(do_trim == "1") code += "    curr_lab <- stringr::str_trim(curr_lab)\n";
+             if(do_squish == "1") code += "    curr_lab <- stringr::str_squish(curr_lab)\n";
              code += "    rk.set.label(res_obj[[n]], curr_lab)\n";
              code += "  }\n";
              code += "}\n";
          }
     }
 
-    // 4. Copy Names to Labels (Overrides previous label cleaning if active)
     if(copy_labels == "1") {
-       code += "# Copying names to variable labels\n";
        code += "for(n in names(res_obj)) {\n";
-       code += "  if(!is.null(res_obj[[n]])) {\n";
-       code += "    rk.set.label(res_obj[[n]], n)\n";
-       code += "  }\n";
+       code += "  if(!is.null(res_obj[[n]])) rk.set.label(res_obj[[n]], n)\n";
        code += "}\n";
     }
-
-    // RULE 3: Unconditional assignment to hard-coded name "tidy_data"
     code += "tidy_data <- res_obj\n";
     echo(code);
   
@@ -104,9 +72,7 @@ function calculate(is_preview){
 function printout(is_preview){
 	// printout the results
 	new Header(i18n("Tidy Names and Labels results")).print();
-
-    echo("rk.header(\"Tidy Names and Labels process completed.\")\n");
-  
+echo("rk.header(\"Tidy Names and Labels process completed.\")\n");
 	//// save result object
 	// read in saveobject variables
 	var tnSaveRes = getValue("tn_save_res");

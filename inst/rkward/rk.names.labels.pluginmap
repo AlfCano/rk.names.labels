@@ -20,8 +20,8 @@
 		name="rk.names.labels"
 		shortinfo="A plugin package to clean and create names and labels of variables of a data.frame or manipulate names in a list in the Rkward GUI."
 		longinfo="A plugin package to clean and create names and labels of variables of a data.frame or manipulate names in a list in the Rkward GUI."
-		version="0.0.1"
-		releasedate="2025-11-19"
+		version="0.0.3"
+		releasedate="2025-11-21"
 		url="https://github.com/AlfCano/rk.names.labels"
 		license="GPL (&gt;= 3)"
 	>
@@ -58,6 +58,20 @@
 			label="Dictionary Lookup"
 			type="standard"
 			file="plugins/DictionaryLookup.xml"
+		>
+		</component>
+		<component
+			id="cmp_TidyNmsndLblsCtlgAssgnmnt"
+			label="Catalog Assignment"
+			type="standard"
+			file="plugins/CatalogAssignment.xml"
+		>
+		</component>
+		<component
+			id="cmp_TidyNamesandLblsImprtCtlg"
+			label="Import Catalog"
+			type="standard"
+			file="plugins/ImportCatalog.xml"
 		>
 		</component>
 		<component
@@ -106,6 +120,42 @@
 				<entry
 					component="cmp_TidyNamesandLblsDctnryLkp"
 				/>
+			</menu>
+		</menu>
+		<menu
+			id="data"
+			label="Data"
+		>
+			<menu
+				id="NamesandLabels"
+				label="Names and Labels"
+			>
+				<menu
+					id="Valuelabelslevels"
+					label="Value labels (levels)"
+				>
+					<entry
+						component="cmp_TidyNmsndLblsCtlgAssgnmnt"
+					/>
+				</menu>
+			</menu>
+		</menu>
+		<menu
+			id="data"
+			label="Data"
+		>
+			<menu
+				id="NamesandLabels"
+				label="Names and Labels"
+			>
+				<menu
+					id="Valuelabelslevels"
+					label="Value labels (levels)"
+				>
+					<entry
+						component="cmp_TidyNamesandLblsImprtCtlg"
+					/>
+				</menu>
 			</menu>
 		</menu>
 		<menu

@@ -1,19 +1,20 @@
 # rk.names.labels: Data Cleaning & Labeling Tools for RKWard
 
-![Version](https://img.shields.io/badge/Version-0.0.1-blue.svg)
+![Version](https://img.shields.io/badge/Version-0.0.3-blue.svg)
 ![License](https://img.shields.io/badge/License-GPL--3-green.svg)
 ![R Version](https://img.shields.io/badge/R-%3E%3D%203.0.0-lightgrey.svg)
 
-This package provides a suite of RKWard plugins designed to streamline the often tedious process of cleaning variable names and managing variable labels in R. It creates a graphical user interface for powerful data tidying functions from packages like `janitor`, `stringr`, `tibble`, and `vctrs`.
+This package provides a suite of RKWard plugins designed to streamline the often tedious process of cleaning variable names and managing variable labels in R. It creates a graphical user interface for powerful data tidying functions from packages like `janitor`, `stringr`, `tibble`, `vctrs`, and `rio`.
 
 It is specifically designed to handle both **column names** (technical identifiers) and **variable labels** (descriptive metadata used by RKWard), allowing users to clean, format, and synchronize them easily.
 
 ## Features / Included Plugins
 
-This package installs a new submenu in RKWard: **Data > Names and Labels**, which contains the following four plugins:
+This package installs a new submenu in RKWard: **Data > Names and Labels**.
 
+### Main Tools
 *   **Tidy Names and Labels:** The central tool for cleaning data frames.
-    *   **Name Repair:** Standardize column names using `janitor::clean_names()` (snake_case), base R's `make.names` (syntactic), or `tibble`'s universal repair strategies.
+    *   **Name Repair:** Standardize column names using `janitor::clean_names()` (snake_case), base R's `make.names` (syntactic), `make.unique`, or `tibble`'s universal repair strategies.
     *   **Case Conversion:** Convert names or labels to `tolower` or `toupper`.
     *   **String Cleanup:** Apply `stringr::str_trim()` (remove surrounding whitespace) and `str_squish()` (reduce repeated internal whitespace).
     *   **Scope Control:** Apply cleaning rules to **Names only**, **Labels only**, or **Both**.
@@ -31,12 +32,23 @@ This package installs a new submenu in RKWard: **Data > Names and Labels**, whic
     *   Select a target data frame and a "dictionary" data frame.
     *   Map variable names to descriptive labels using a Key/Value matching system (via the `lookup` package).
 
+### Submenu: Value labels (levels)
+*   **Catalog Assignment:** Applies value labels to factor levels using reference catalogs.
+    *   Accepts a **List of Data Frames** (automatically matches list names to variable names in the target).
+    *   Accepts a **Single Data Frame** (applies one catalog to all compatible variables in the target).
+    *   Uses `lookup::vlookup` to map codes to descriptions.
+
+*   **Import Catalog:** A utility to build catalog lists.
+    *   Batch imports multiple CSV files from a selected directory.
+    *   Cleans character encoding (e.g., UTF-8 or Latin1).
+    *   Creates a named list of data frames ready for use in "Catalog Assignment".
+
 ## Requirements
 
 1.  A working installation of **RKWard**.
 2.  The following R packages are required for the plugins to function. If you do not have them, install them from the R console:
     ```R
-    install.packages(c("janitor", "stringr", "tibble", "vctrs", "lookup"))
+    install.packages(c("janitor", "stringr", "tibble", "vctrs", "lookup", "rio"))
     ```
 3.  The R package **`devtools`** is required for installation from source.
     ```R
