@@ -3,8 +3,8 @@ Type: Package
 Title: A plugin package to clean and create names and labels of
         variables of a data.frame or manipulate names in a list in the
         Rkward GUI.
-Version: 0.0.4
-Date: 2025-11-21
+Version: 0.0.5
+Date: 2026-03-07
 Author: Alfonso Cano
 Maintainer: Alfonso Cano <alfonso.cano@correo.buap.mx>
 Enhances: rkward

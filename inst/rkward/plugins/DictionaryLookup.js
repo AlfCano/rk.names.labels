@@ -17,11 +17,11 @@ function calculate(is_preview){
     var target = getValue("dl_target");
     var key_vec = getValue("dl_key_col");
     var val_vec = getValue("dl_val_col");
-    
+
     var code = "res_obj <- " + target + "\n";
     code += "keys <- " + key_vec + "\n";
     code += "vals <- " + val_vec + "\n";
-    
+
     code += "for(col_name in names(res_obj)) {\n";
     code += "   match_idx <- match(col_name, keys)\n";
     code += "   if(!is.na(match_idx)) {\n";

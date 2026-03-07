@@ -1,12 +1,25 @@
 # rk.names.labels: Data Cleaning & Labeling Tools for RKWard
 
-![Version](https://img.shields.io/badge/Version-0.0.4-blue.svg)
-![License](https://img.shields.io/badge/License-GPL--3-green.svg)
-![R Version](https://img.shields.io/badge/R-%3E%3D%203.0.0-lightgrey.svg)
+![Version](https://img.shields.io/badge/Version-0.0.5-blue.svg)
+[![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+![RKWard](https://img.shields.io/badge/Platform-RKWard-green)
+[![R Linter](https://github.com/AlfCano/rk.names.labels/actions/workflows/lintr.yml/badge.svg)](https://github.com/AlfCano/rk.names.labels/actions/workflows/lintr.yml)
+![AI Gemini](https://img.shields.io/badge/AI-Gemini-4285F4?logo=googlegemini&logoColor=white)
 
 This package provides a suite of RKWard plugins designed to streamline the often tedious process of cleaning variable names and managing variable labels in R. It creates a graphical user interface for powerful data tidying functions from packages like `janitor`, `stringr`, `tibble`, `vctrs`, and `rio`.
 
 It is specifically designed to handle both **column names** (technical identifiers) and **variable labels** (descriptive metadata used by RKWard), allowing users to clean, format, and synchronize them easily.
+
+## 🌍 Internationalization
+
+As of version 0.0.5, this plugin is fully localized. The interface automatically adapts to the language settings of your RKWard installation.
+
+**Supported Languages:**
+*   🇺🇸 **English** (Default)
+*   🇪🇸 **Spanish** (`es`)
+*   🇫🇷 **French** (`fr`)
+*   🇩🇪 **German** (`de`)
+*   🇧🇷 **Portuguese** (Brazil) (`pt_BR`)
 
 ## Features / Included Plugins
 
@@ -30,7 +43,7 @@ This package installs a new submenu in RKWard: **Data > Names and Labels**.
 
 *   **Dictionary Lookup:** Automate labeling using a codebook.
     *   Select a target data frame and a "dictionary" data frame.
-    *   **New in v0.0.4:** Select the Key (variable name) and Value (label) columns directly using drag-and-drop slots.
+    *   Select the Key (variable name) and Value (label) columns directly using drag-and-drop slots.
     *   Maps descriptive labels using a Key/Value matching system (via the `lookup` package).
 
 ### Submenu: Value labels (levels)
@@ -44,40 +57,27 @@ This package installs a new submenu in RKWard: **Data > Names and Labels**.
     *   Cleans character encoding (e.g., UTF-8 or Latin1).
     *   Creates a named list of data frames ready for use in "Catalog Assignment".
 
-## Requirements
-
-1.  A working installation of **RKWard**.
-2.  The following R packages are required for the plugins to function. If you do not have them, install them from the R console:
-    ```R
-    install.packages(c("janitor", "stringr", "tibble", "vctrs", "lookup", "rio"))
-    ```
-3.  The R package **`devtools`** is required for installation from source.
-    ```R
-    install.packages("devtools")
-    ```
-
 ## Installation
 
-To install the `rk.names.labels` plugin package directly from GitHub:
-
-1.  Open R in RKWard.
-2.  Run the following commands in the R console:
+### With `remotes` (Recommended)
+To install the plugin package directly from GitHub:
 
 ```R
 local({
-## Prepare
-require(devtools)
-## Install
+## Preparar
+require(remotes)
+## Computar
   install_github(
     repo="AlfCano/rk.names.labels"
   )
-## Print result
-rk.header ("Installation from GitHub completed")
+## Imprimir el resultado
+rk.header ("Resultados de Instalar desde git")
 })
-
 ```
 
-3.  Restart RKWard to update the menu structure.
+### Manual Installation
+1.  Download this repository as a `.zip` file.
+2.  In RKWard, go to **Settings -> R Packages -> Install package(s) from local zip file(s)**.
 
 ## Usage
 
@@ -99,8 +99,13 @@ Once installed, all plugins can be found under the **Data > Names and Labels** m
 
 The result will be a clean data frame (`first_name`, `last_name`, `age_years`) ready for analysis.
 
-## Author
+## Requirements
 
-Alfonso Cano (alfonso.cano@correo.buap.mx)
+*   **RKWard:** Version 0.7.0 or greater.
+*   **R Packages:** `janitor`, `stringr`, `tibble`, `vctrs`, `lookup`, `rio`.
 
-Assisted by Gemini, a large language model from Google.
+## Author & License
+
+*   **Author:** Alfonso Cano (<alfonso.cano@correo.buap.mx>)
+*   **Assisted by:** Gemini, a large language model from Google.
+*   **License:** GPL (>= 3)

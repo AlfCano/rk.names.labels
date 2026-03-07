@@ -1,0 +1,282 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: rk.names.labels 0.0.5\n"
+"Report-Msgid-Bugs-To: alfonso.cano@correo.buap.mx\n"
+"POT-Creation-Date: 2026-03-07 09:03-0600\n"
+"PO-Revision-Date: 2026-03-07 09:03-0600\n"
+"Last-Translator: Alfonso Cano <alfonso.cano@correo.buap.mx>\n"
+"Language-Team: Portuguese (Brazil) <rkward-devel@kde.org>\n"
+"Language: pt_BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+# --- Hierarchy & Plugin Names ---
+
+msgid "Names and Labels"
+msgstr "Nomes e Rótulos"
+
+msgid "Value labels (levels)"
+msgstr "Rótulos de Valor (níveis)"
+
+msgid "Tidy Names and Labels"
+msgstr "Limpar Nomes e Rótulos"
+
+msgid "Pattern Replace"
+msgstr "Substituir por Padrão"
+
+msgid "Sequence Rename"
+msgstr "Renomear em Sequência"
+
+msgid "Dictionary Lookup"
+msgstr "Consulta em Dicionário"
+
+msgid "Catalog Assignment"
+msgstr "Atribuição de Catálogo"
+
+msgid "Import Catalog"
+msgstr "Importar Catálogo"
+
+# --- Component: Tidy Names and Labels ---
+
+msgid "Select Data Frame or List"
+msgstr "Selecionar Data Frame ou Lista"
+
+msgid "Name Repair Strategy (Names Only)"
+msgstr "Estratégia de Reparo de Nome (Apenas Nomes)"
+
+msgid "None"
+msgstr "Nenhuma"
+
+msgid "Janitor (snake_case)"
+msgstr "Janitor (snake_case)"
+
+msgid "Make Syntactic (base::make.names)"
+msgstr "Tornar Sintático (base::make.names)"
+
+msgid "Make Unique (base::make.unique)"
+msgstr "Tornar Único (base::make.unique)"
+
+msgid "Universal (vctrs/tibble)"
+msgstr "Universal (vctrs/tibble)"
+
+msgid "Case Transformation"
+msgstr "Transformação de Maiúsculas/Minúsculas"
+
+msgid "No Change"
+msgstr "Sem Mudanças"
+
+msgid "Lowercase (tolower)"
+msgstr "Minúsculas (tolower)"
+
+msgid "Uppercase (toupper)"
+msgstr "Maiúsculas (toupper)"
+
+msgid "Apply Transformations To"
+msgstr "Aplicar Transformações A"
+
+msgid "Names Only"
+msgstr "Apenas Nomes"
+
+msgid "Labels Only"
+msgstr "Apenas Rótulos"
+
+msgid "Both Names and Labels"
+msgstr "Nomes e Rótulos"
+
+msgid "Trim Whitespace (str_trim)"
+msgstr "Aparar Espaços (str_trim)"
+
+msgid "Squish Whitespace (str_squish)"
+msgstr "Comprimir Espaços (str_squish)"
+
+msgid "<b>Note:</b> 'Name Repair' strategies only affect Names. Case and Whitespace options apply based on the dropdown selection."
+msgstr "<b>Nota:</b> Estratégias de 'Reparo de Nome' afetam apenas Nomes. Opções de maiúsculas e espaços aplicam-se conforme seleção."
+
+msgid "Additional Actions"
+msgstr "Ações Adicionais"
+
+msgid "Copy variable names to labels (After processing)"
+msgstr "Copiar nomes de variáveis para rótulos (Após processamento)"
+
+msgid "Save result as"
+msgstr "Salvar resultado como"
+
+msgid "Input"
+msgstr "Entrada"
+
+msgid "Transformations"
+msgstr "Transformações"
+
+msgid "Structure & Repair"
+msgstr "Estrutura e Reparo"
+
+msgid "Case Conversion"
+msgstr "Conversão de Caixa"
+
+msgid "Scope and Cleanup"
+msgstr "Escopo e Limpeza"
+
+msgid "Output"
+msgstr "Saída"
+
+msgid "Tidy Names and Labels process completed."
+msgstr "Processo de Limpeza de Nomes e Rótulos concluído."
+
+# --- Component: Pattern Replacement ---
+
+msgid "Pattern Replacement"
+msgstr "Substituição de Padrão"
+
+msgid "Pattern (Regex)"
+msgstr "Padrão (Regex)"
+
+msgid "Replacement"
+msgstr "Substituição"
+
+msgid "Scope"
+msgstr "Escopo"
+
+msgid "Names"
+msgstr "Nomes"
+
+msgid "Labels"
+msgstr "Rótulos"
+
+msgid "Substitution"
+msgstr "Substituição"
+
+msgid "Pattern Replacement process completed."
+msgstr "Processo de Substituição de Padrão concluído."
+
+# --- Component: Sequence Rename ---
+
+msgid "Select Data Frame"
+msgstr "Selecionar Data Frame"
+
+msgid "Select Columns to Rename"
+msgstr "Selecionar Colunas para Renomear"
+
+msgid "Mode"
+msgstr "Modo"
+
+msgid "Sequence"
+msgstr "Sequência"
+
+msgid "Tibble Repair"
+msgstr "Reparo Tibble"
+
+msgid "Prefix"
+msgstr "Prefixo"
+
+msgid "Suffix"
+msgstr "Sufixo"
+
+msgid "Start Number"
+msgstr "Número Inicial"
+
+msgid "Repair Strategy"
+msgstr "Estratégia de Reparo"
+
+msgid "Unique"
+msgstr "Único"
+
+msgid "Universal"
+msgstr "Universal"
+
+msgid "Save Result"
+msgstr "Salvar Resultado"
+
+msgid "Selection"
+msgstr "Seleção"
+
+msgid "Configuration"
+msgstr "Configuração"
+
+msgid "Sequence Options"
+msgstr "Opções de Sequência"
+
+msgid "Sequence Rename / Repair process completed."
+msgstr "Processo de Renomeação Sequencial / Reparo concluído."
+
+# --- Component: Dictionary Lookup ---
+
+msgid "Dictionary Label Lookup"
+msgstr "Busca de Rótulos em Dicionário"
+
+msgid "Target Data Frame"
+msgstr "Data Frame Alvo"
+
+msgid "Dictionary Data Frame"
+msgstr "Data Frame Dicionário"
+
+msgid "Dictionary Key Column (Variable Names)"
+msgstr "Coluna Chave Dicionário (Nomes Variável)"
+
+msgid "Dictionary Value Column (Labels)"
+msgstr "Coluna Valor Dicionário (Rótulos)"
+
+msgid "Save Target as"
+msgstr "Salvar Alvo como"
+
+msgid "Data"
+msgstr "Dados"
+
+msgid "Dictionary Source"
+msgstr "Fonte do Dicionário"
+
+msgid "Dictionary Columns"
+msgstr "Colunas do Dicionário"
+
+msgid "Dictionary Labeling process completed."
+msgstr "Processo de Rotulagem por Dicionário concluído."
+
+# --- Component: Catalog Assignment ---
+
+msgid "Catalog Source (List or Data Frame)"
+msgstr "Fonte de Catálogo (Lista ou Data Frame)"
+
+msgid "Key Column (in catalogs)"
+msgstr "Coluna Chave (nos catálogos)"
+
+msgid "Value Column (in catalogs)"
+msgstr "Coluna Valor (nos catálogos)"
+
+msgid "Target Data"
+msgstr "Dados Alvo"
+
+msgid "Catalog Source"
+msgstr "Fonte de Catálogo"
+
+msgid "Catalog Structure"
+msgstr "Estrutura do Catálogo"
+
+msgid "Catalog Assignment process completed."
+msgstr "Processo de Atribuição de Catálogo concluído."
+
+# --- Component: Import Catalog ---
+
+msgid "Select Directory (containing CSVs)"
+msgstr "Selecionar Diretório (contendo CSVs)"
+
+msgid "File Pattern (Regex)"
+msgstr "Padrão de Arquivo (Regex)"
+
+msgid "Default: .csv$ (matches CSV files)"
+msgstr "Padrão: .csv$ (corresponde a arquivos CSV)"
+
+msgid "Encoding"
+msgstr "Codificação"
+
+msgid "Save Catalog List as"
+msgstr "Salvar Lista de Catálogo como"
+
+msgid "Source Directory"
+msgstr "Diretório Fonte"
+
+msgid "File Options"
+msgstr "Opções de Arquivo"
+
+msgid "Catalog Import process completed."
+msgstr "Processo de Importação de Catálogo concluído."
