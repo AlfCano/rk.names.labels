@@ -1,6 +1,6 @@
 # rk.names.labels: Data Cleaning & Labeling Tools for RKWard
 
-![Version](https://img.shields.io/badge/Version-0.0.5-blue.svg)
+![Version](https://img.shields.io/badge/Version-0.0.6-blue.svg)
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 ![RKWard](https://img.shields.io/badge/Platform-RKWard-green)
 [![R Linter](https://github.com/AlfCano/rk.names.labels/actions/workflows/lintr.yml/badge.svg)](https://github.com/AlfCano/rk.names.labels/actions/workflows/lintr.yml)
@@ -21,6 +21,14 @@ As of version 0.0.5, this plugin is fully localized. The interface automatically
 *   🇩🇪 **German** (`de`)
 *   🇧🇷 **Portuguese** (Brazil) (`pt_BR`)
 
+## 🚀 What's New in Version 0.0.6
+
+### Smart Label Synchronization
+Version 0.0.6 completely revamps how variable names are copied to labels, solving a major workflow issue when dealing with raw survey data (e.g., from Google Forms or SurveyMonkey):
+
+*   **"Before Processing" mode:** You can now copy the *original, messy* column headers (which often contain the full survey questions) into the R metadata labels **before** the cleaning algorithms run. This allows you to preserve the exact question text for your plots and tables, while simultaneously transforming the actual column names into clean, short, `snake_case` identifiers—all in a single click!
+*   **New Output Controls:** The old checkbox has been replaced with a versatile radio button menu in the Output tab, allowing you to choose between *"Do not copy"*, *"Before processing"*, or *"After processing"*.
+
 ## Features / Included Plugins
 
 This package installs a new submenu in RKWard: **Data > Names and Labels**.
@@ -31,6 +39,8 @@ This package installs a new submenu in RKWard: **Data > Names and Labels**.
     *   **Case Conversion:** Convert names or labels to `tolower` or `toupper`.
     *   **String Cleanup:** Apply `stringr::str_trim()` (remove surrounding whitespace) and `str_squish()` (reduce repeated internal whitespace).
     *   **Scope Control:** Apply cleaning rules to **Names only**, **Labels only**, or **Both**.
+    *   **Smart Sync (New in v0.0.6):** Choose exactly *when* to copy variable names to labels. Select **"Before processing"** to preserve raw, descriptive column headers (like full Google Forms questions) as metadata labels *before* they get cleaned. Alternatively, select **"After processing"** to use the newly cleaned names as labels.
+
     *   **Sync:** Option to copy cleaned variable names directly into the variable labels.
 
 *   **Pattern Replacement:** A regex-based search and replace tool.
@@ -93,7 +103,7 @@ Once installed, all plugins can be found under the **Data > Names and Labels** m
     *   Set **Apply Transformations To** to "Both Names and Labels".
     *   Check "Squish Whitespace" to fix spacing issues.
 5.  **Output Tab:**
-    *   Check "Copy variable names to labels" if you want the new clean names to be the default label.
+    *   Under **Copy Variable Names to Labels**, select **"Before processing"** if you want to save the original, messy names as labels (great for imported surveys), or select **"After processing"** to use your newly cleaned names.
     *   Define the output object name (default is `tidy_data`).
 6.  Click **Submit**.
 

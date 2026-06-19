@@ -68,9 +68,13 @@
 						</column>
 					</tab>
 					<tab label="Output" id="tab_Output">
-						<column id="clm_frAAAACA1S">
+						<column id="clm_fAAAACVNLD">
 							<frame label="Additional Actions" id="frm_AddtnlAc">
-								<checkbox id="tn_copy_to_label" label="Copy variable names to labels (After processing)" value="1" />
+								<radio id="tn_copy_mode" label="Copy Variable Names to Labels">
+									<option label="Do not copy" value="none" checked="true" />
+									<option label="Before processing (Preserves original survey questions)" value="before" />
+									<option label="After processing (Copies the cleaned names)" value="after" />
+								</radio>
 							</frame>
 							<saveobject label="Save result as" checkable="true" checked="true" initial="tidy_data" id="tn_save_res" />
 						</column>

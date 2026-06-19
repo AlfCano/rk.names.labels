@@ -18,7 +18,6 @@ function calculate(is_preview){
     var pattern = getValue("ic_pattern");
     var enc = getValue("ic_encoding");
 
-    // FIXED: Double escaping for correct R string generation (\\\\ -> \\ -> \. in R)
     if(pattern == "") pattern = "\\\\.csv$";
 
     var code = "iconv.recursive <- function (x, from) {\n";

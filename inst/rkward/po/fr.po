@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: rk.names.labels 0.0.5\n"
+"Project-Id-Version: rk.names.labels 0.0.6\n"
 "Report-Msgid-Bugs-To: alfonso.cano@correo.buap.mx\n"
 "POT-Creation-Date: 2026-03-07 09:03-0600\n"
 "PO-Revision-Date: 2026-03-07 09:03-0600\n"
@@ -280,3 +280,21 @@ msgstr "Options Fichier"
 
 msgid "Catalog Import process completed."
 msgstr "Processus Importation Catalogue terminé."
+
+msgid "Names and Labels"
+msgstr "Noms et Étiquettes"
+
+msgid "<b>Note:</b> 'Name Repair' strategies only affect Names. Case and Whitespace options apply based on the dropdown selection."
+msgstr "<b>Remarque :</b> Les stratégies de 'Réparation des Noms' n'affectent que les Noms. Les options de majuscules/minuscules et d'espaces s'appliquent selon la sélection du menu déroulant."
+
+msgid "Copy Variable Names to Labels"
+msgstr "Copier les Noms de Variables vers les Étiquettes"
+
+msgid "Do not copy"
+msgstr "Ne pas copier"
+
+msgid "Before processing (Preserves original survey questions)"
+msgstr "Avant le traitement (Préserve les questions originales de l'enquête)"
+
+msgid "After processing (Copies the cleaned names)"
+msgstr "Après le traitement (Copie les noms nettoyés)"

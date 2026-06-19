@@ -1,7 +1,3 @@
-# Golden Rules of RKWard Plugin Development (Revised & Extended)
-# Plugin: rk.names.labels (Data Tidy: Names and Labels)
-# STATUS: FIXED (Dictionary Lookup now uses varslots for columns; Version 0.0.4)
-
 local({
   # =========================================================================================
   # 1. Prerequisites & Package Metadata
@@ -19,7 +15,7 @@ local({
     ),
     about = list(
       desc = "A plugin package to clean and create names and labels of variables of a data.frame or manipulate names in a list in the Rkward GUI.",
-      version = "0.0.4",
+      version = "0.0.6", # Actualizado para reflejar la mejora de copiado
       url = "https://github.com/AlfCano/rk.names.labels",
       license = "GPL (>= 3)"
     )
@@ -70,8 +66,15 @@ local({
 
   tn_warning <- rk.XML.text("<b>Note:</b> 'Name Repair' strategies only affect Names. Case and Whitespace options apply based on the dropdown selection.")
 
+  # NUEVO: Control de copiado Antes/Después/No Copiar
+  tn_copy_mode <- rk.XML.radio("Copy Variable Names to Labels", options = list(
+    "Do not copy" = list(val = "none", chk = TRUE), # <-- chk = TRUE ahora está aquí
+    "Before processing (Preserves original survey questions)" = list(val = "before"),
+    "After processing (Copies the cleaned names)" = list(val = "after")
+  ), id.name = "tn_copy_mode")
+
   tn_actions <- rk.XML.frame(
-    rk.XML.cbox("Copy variable names to labels (After processing)", value = "1", id.name = "tn_copy_to_label"),
+    tn_copy_mode,
     label = "Additional Actions"
   )
 
@@ -103,9 +106,18 @@ local({
     var scope = getValue("tn_scope");
     var do_trim = getValue("tn_trim");
     var do_squish = getValue("tn_squish");
-    var copy_labels = getValue("tn_copy_to_label");
+    var copy_mode = getValue("tn_copy_mode");
 
     var code = "res_obj <- " + obj + "\\n";
+
+    // NUEVA LÓGICA: Copiar ANTES de procesar
+    if(copy_mode == "before") {
+       code += "# Preserve original names as labels before cleaning\\n";
+       code += "for(n in names(res_obj)) {\\n";
+       code += "  if(!is.null(res_obj[[n]])) rk.set.label(res_obj[[n]], n)\\n";
+       code += "}\\n\\n";
+    }
+
     code += "current_names <- names(res_obj)\\n";
 
     if(repair_method == "janitor") {
@@ -142,11 +154,14 @@ local({
          }
     }
 
-    if(copy_labels == "1") {
+    // NUEVA LÓGICA: Copiar DESPUÉS de procesar
+    if(copy_mode == "after") {
+       code += "# Copy cleaned names to labels\\n";
        code += "for(n in names(res_obj)) {\\n";
        code += "  if(!is.null(res_obj[[n]])) rk.set.label(res_obj[[n]], n)\\n";
        code += "}\\n";
     }
+
     code += "tidy_data <- res_obj\\n";
     echo(code);
   '
@@ -265,13 +280,11 @@ local({
   component_sr <- rk.plugin.component("Sequence Rename", xml = list(dialog = sr_dialog), js = list(require = "tibble", calculate = js_calc_sr, printout = js_print_sr), rkh = list(help = help_sr), hierarchy = list("data", "Names and Labels"))
 
   # =========================================================================================
-  # Component 4: Dictionary Lookup (UPDATED: Varslots for Columns)
+  # Component 4: Dictionary Lookup
   # =========================================================================================
 
   dl_target <- rk.XML.varslot("Target Data Frame", source = var_select, required = TRUE, classes = "data.frame", id.name = "dl_target")
   dl_dict <- rk.XML.varslot("Dictionary Data Frame", source = var_select, required = TRUE, classes = "data.frame", id.name = "dl_dict")
-
-  # FIXED: Changed from Input to Varslot to allow selecting columns
   dl_key <- rk.XML.varslot("Dictionary Key Column (Variable Names)", source = var_select, required = TRUE, id.name = "dl_key_col")
   dl_val <- rk.XML.varslot("Dictionary Value Column (Labels)", source = var_select, required = TRUE, id.name = "dl_val_col")
 
@@ -325,7 +338,7 @@ local({
   component_dl <- rk.plugin.component("Dictionary Lookup", xml = list(dialog = dl_dialog), js = list(require = "lookup", calculate = js_calc_dl, printout = js_print_dl), rkh = list(help = help_dl), hierarchy = list("data", "Names and Labels"))
 
   # =========================================================================================
-  # Component 5: Catalog Assignment (Formerly Value labels)
+  # Component 5: Catalog Assignment
   # =========================================================================================
 
   vl_target <- rk.XML.varslot("Target Data Frame", source = var_select, required = TRUE, classes = "data.frame", id.name = "vl_target")
@@ -382,7 +395,6 @@ local({
 
   ic_dir <- rk.XML.browser("Select Directory (containing CSVs)", type = "dir", required = TRUE, id.name = "ic_dir")
 
-  # FIXED: Simple label, text node for instructions
   ic_pattern <- rk.XML.input("File Pattern (Regex)", id.name = "ic_pattern")
   ic_note <- rk.XML.text("Default: .csv$ (matches CSV files)")
 
@@ -403,7 +415,6 @@ local({
     var pattern = getValue("ic_pattern");
     var enc = getValue("ic_encoding");
 
-    // FIXED: Double escaping for correct R string generation (\\\\\\\\ -> \\\\ -> \\. in R)
     if(pattern == "") pattern = "\\\\\\\\.csv$";
 
     var code = "iconv.recursive <- function (x, from) {\\n";

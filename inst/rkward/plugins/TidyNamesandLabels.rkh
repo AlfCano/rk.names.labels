@@ -36,7 +36,7 @@
 		</setting>
 		<caption id="tab_Output" />
 		<caption id="frm_AddtnlAc" />
-		<setting id="tn_copy_to_label">
+		<setting id="tn_copy_mode">
 		</setting>
 		<setting id="tn_save_res">
 		</setting>

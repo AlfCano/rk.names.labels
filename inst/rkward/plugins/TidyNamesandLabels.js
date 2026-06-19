@@ -20,9 +20,18 @@ function calculate(is_preview){
     var scope = getValue("tn_scope");
     var do_trim = getValue("tn_trim");
     var do_squish = getValue("tn_squish");
-    var copy_labels = getValue("tn_copy_to_label");
+    var copy_mode = getValue("tn_copy_mode");
 
     var code = "res_obj <- " + obj + "\n";
+
+    // NUEVA LÓGICA: Copiar ANTES de procesar
+    if(copy_mode == "before") {
+       code += "# Preserve original names as labels before cleaning\n";
+       code += "for(n in names(res_obj)) {\n";
+       code += "  if(!is.null(res_obj[[n]])) rk.set.label(res_obj[[n]], n)\n";
+       code += "}\n\n";
+    }
+
     code += "current_names <- names(res_obj)\n";
 
     if(repair_method == "janitor") {
@@ -59,11 +68,14 @@ function calculate(is_preview){
          }
     }
 
-    if(copy_labels == "1") {
+    // NUEVA LÓGICA: Copiar DESPUÉS de procesar
+    if(copy_mode == "after") {
+       code += "# Copy cleaned names to labels\n";
        code += "for(n in names(res_obj)) {\n";
        code += "  if(!is.null(res_obj[[n]])) rk.set.label(res_obj[[n]], n)\n";
        code += "}\n";
     }
+
     code += "tidy_data <- res_obj\n";
     echo(code);
   
